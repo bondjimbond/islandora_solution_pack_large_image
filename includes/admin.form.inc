@@ -55,6 +55,13 @@ function islandora_large_image_admin(array $form, array &$form_state) {
         ),
       ),
     ),
+    'islandora_large_image_clipping' => array(
+      '#type' => 'checkbox',
+      '#title' => t("Enable clipping tool"),
+      '#default_value' => $get_default_value('islandora_large_image_clipping', TRUE),
+      '#description' => t('Allow users to download custom segments of the JP2 derivative.'),
+    ),
+
     'islandora_kakadu_url' => array(
       '#type' => 'textfield',
       '#title' => t("Path to Kakadu"),
