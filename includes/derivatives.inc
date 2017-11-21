@@ -220,6 +220,7 @@ function islandora_large_image_create_tn_derivative(AbstractObject $object, $for
     $args = array();
     $args[] = '-quality ' . escapeshellarg(variable_get('imagemagick_quality', 75));
     $args[] = '-resize ' . escapeshellarg("200 x 200");
+    $args[] = '-colorspace RGB';
     $derivative_file = islandora_large_image_imagemagick_convert($uploaded_file, "temporary://{$base_name}_TN.jpg", $args);
     if ($derivative_file === FALSE) {
       $to_return['messages'][] = array(
@@ -469,9 +470,9 @@ function islandora_large_image_get_args($lossless) {
 function islandora_large_image_is_uncompressed_tiff($file) {
   $identify = islandora_large_image_get_identify();
 
-  $file = drupal_realpath($file);
+  $escaped_file = escapeshellarg(drupal_realpath($file));
 
-  $compression = exec(escapeshellcmd("$identify -format \"%C\" $file"));
+  $compression = exec(escapeshellcmd("$identify -format \"%C\" ") . $escaped_file);
 
   $compressed = (strtolower($compression) != 'none');
 
@@ -490,9 +491,9 @@ function islandora_large_image_is_uncompressed_tiff($file) {
 function islandora_large_image_is_tiff($file) {
   $identify = islandora_large_image_get_identify();
 
-  $file = drupal_realpath($file);
+  $escaped_file = escapeshellarg(drupal_realpath($file));
 
-  $codec = exec(escapeshellcmd("$identify -format \"%m\" $file"));
+  $codec = exec(escapeshellcmd("$identify -format \"%m\" ") . $escaped_file);
 
   $is_tiff = strrpos(strtolower($codec), 'tiff');
 
@@ -516,9 +517,9 @@ function islandora_large_image_is_tiff($file) {
 function islandora_large_image_is_jp2($file) {
   $identify = islandora_large_image_get_identify();
 
-  $file = drupal_realpath($file);
+  $escaped_file = escapeshellarg(drupal_realpath($file));
 
-  $codec = exec(escapeshellcmd("$identify -format \"%m\" $file"));
+  $codec = exec(escapeshellcmd("$identify -format \"%m\" ") . $escaped_file);
 
   $is_jp2 = (strtolower($codec) == 'jp2');
 
